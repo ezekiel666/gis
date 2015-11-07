@@ -7,7 +7,7 @@
  *  
  ******************************************************************************/
 
-package pl.zerocool.gis.generator.algs4;
+package edu.princeton.cs.algs4;
 
 /**
  *  The <tt>DigraphGenerator</tt> class provides static methods for creating

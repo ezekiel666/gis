@@ -15,3 +15,9 @@ Invocations:
 ./run.sh -logLevel=off -probMode -v=10 -outputFile=10.gv -p=0.25
 
 # tarjan #
+
+Tarjan's strongly connected components algorithm.
+
+Invocations:
+
+./run.sh -logLevel=off -inputFile=../data/10.gv -time

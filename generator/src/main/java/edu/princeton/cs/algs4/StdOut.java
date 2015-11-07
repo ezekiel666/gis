@@ -7,7 +7,7 @@
  *
  ******************************************************************************/
 
-package pl.zerocool.gis.generator.algs4;
+package edu.princeton.cs.algs4;
 
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;

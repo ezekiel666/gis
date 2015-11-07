@@ -6,4 +6,4 @@
  * @see <a href="https://github.com/kevin-wayne/algs4/">Algs4 Github repository</a>
  * @author Cezary Pawlowski
  */
-package pl.zerocool.gis.generator.algs4;
+package edu.princeton.cs.algs4;

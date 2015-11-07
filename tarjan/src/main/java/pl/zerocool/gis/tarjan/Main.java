@@ -1,19 +1,21 @@
-package pl.zerocool.gis.generator;
+package pl.zerocool.gis.tarjan;
 
 import org.jgraph.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
-import org.jgrapht.ext.DOTExporter;
+import org.jgrapht.ext.DOTImporter;
+import org.jgrapht.ext.EdgeProvider;
+import org.jgrapht.ext.ImportException;
+import org.jgrapht.ext.VertexProvider;
+import org.jgrapht.graph.AbstractBaseGraph;
 import org.jgrapht.graph.DefaultDirectedGraph;
 import org.kohsuke.args4j.CmdLineException;
 import org.kohsuke.args4j.CmdLineParser;
 import org.kohsuke.args4j.ParserProperties;
-import edu.princeton.cs.algs4.Digraph;
-import edu.princeton.cs.algs4.DigraphGenerator;
 
-import java.io.FileNotFoundException;
-import java.io.PrintWriter;
-import java.io.UnsupportedEncodingException;
-import java.util.Locale;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -105,23 +107,10 @@ public class Main {
         /* program flow */
 
         try {
-            Digraph graph = null;
-            if(options.simpleMode) {
-                LOGGER.info("simple mode");
-                graph = DigraphGenerator.simple(options.v, options.e);
-            } else if(options.probMode) {
-                LOGGER.info("probabilistic mode");
-                graph = DigraphGenerator.simple(options.v, options.p);
-            } else if(options.strongMode) {
-                LOGGER.info("strong mode");
-                graph = DigraphGenerator.strong(options.v, options.e, options.c);
-            }
-
-            LOGGER.info("converting graph");
-            DirectedGraph jgraph = convert(graph);
-
-            LOGGER.info("saving graph");
-            save(jgraph, options.outputFile);
+            LOGGER.info("reading graph");
+            DirectedGraph<Integer, DefaultEdge> graph = read(options.inputFile);
+            LOGGER.info("vertices: " + graph.vertexSet().size());
+            LOGGER.info("edges: " + graph.edgeSet().size());
 
         } catch(Exception e) {
             System.out.println("Critical error occurred: " + e);
@@ -130,40 +119,25 @@ public class Main {
     }
 
     /**
-     * Converts graph from one representation to another.
+     * Reads graph from a file.
      *
-     * @param graph graph in algs4 representation
-     * @return a graph in jgrapht representation
+     * @param inputFile input file with graph in dot language
+     * @return a graph
+     * @throws ImportException if an error occurs
+     * @throws IOException if an error occurs
      */
-    private static DirectedGraph convert(Digraph graph) {
-        DirectedGraph<Integer, DefaultEdge> jgraph =
+    private static DirectedGraph<Integer, DefaultEdge> read(String inputFile) throws ImportException, IOException {
+        DOTImporter<Integer, DefaultEdge> importer =
+                new DOTImporter<>(new VertexProviderImpl(), new EdgeProviderImpl());
+
+        DirectedGraph<Integer, DefaultEdge> graph =
                 new DefaultDirectedGraph<>(DefaultEdge.class);
 
-        for(Integer v1 = 0; v1 < graph.V(); ++v1) {
-            jgraph.addVertex(v1);
-        }
+        String fileContent = new String(Files.readAllBytes(Paths.get(inputFile)), "UTF-8");
 
-        for(Integer v1 = 0; v1 < graph.V(); ++v1) {
-            for(Integer v2 : graph.adj(v1)) {
-                jgraph.addEdge(v1, v2);
-            }
-        }
+        importer.read(fileContent, (AbstractBaseGraph<Integer, DefaultEdge>) graph);
 
-        return jgraph;
-    }
-
-    /**
-     * Saves graph in dot language.
-     *
-     * @param jgraph graph
-     * @param outputFile output file
-     * @throws FileNotFoundException if an error occurs
-     * @throws UnsupportedEncodingException if an error occurs
-     */
-    private static void save(DirectedGraph jgraph, String outputFile) throws FileNotFoundException, UnsupportedEncodingException {
-        DOTExporter exporter = new DOTExporter();
-        PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
-        exporter.export(writer, jgraph);
+        return graph;
     }
 
     /**
@@ -172,12 +146,36 @@ public class Main {
      * @param parser options parser
      */
     private static void printHelp(CmdLineParser parser) {
-        System.out.println("Directed graph generator developed for GIS classes by Cezary Pawlowski and Pawel Banasiak.");
+        System.out.println("Tarjan's strongly connected components algorithm developed for GIS classes by Cezary Pawlowski and Pawel Banasiak.");
         System.out.println();
         System.out.println("Usage:");
         parser.printUsage(System.out);
-        System.out.println();
-        System.out.println("Program mode needs to be specified explicitly.");
-        System.out.println("Generated graphs are saved in dot language (plain text graph description language).");
+    }
+
+    /**
+     * Vertex provider.
+     *
+     * @author Cezary Pawlowski
+     */
+    public static class VertexProviderImpl implements VertexProvider<Integer> {
+        @Override
+        public Integer buildVertex(String label, Map<String, String> attributes) {
+            return Integer.parseInt(label);
+        }
+    }
+
+    /**
+     * Edge provider.
+     *
+     * @author Cezary Pawlowski
+     */
+    public static class EdgeProviderImpl implements EdgeProvider<Integer, DefaultEdge> {
+        @Override
+        public DefaultEdge buildEdge(Integer from, Integer to, String label, Map<String, String> attributes) {
+            DefaultEdge edge = new DefaultEdge();
+            edge.setSource(from);
+            edge.setTarget(to);
+            return edge;
+        }
     }
 }
