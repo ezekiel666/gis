@@ -19,6 +19,7 @@ import java.util.*;
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Program main class.
@@ -102,9 +103,29 @@ public class Main {
             LOGGER.info("vertices: " + graph.vertexSet().size());
             LOGGER.info("edges: " + graph.edgeSet().size());
 
+            LOGGER.info("computing scc");
+            List<Set<Integer>> scc = Algorithm.tarjanSCC(graph, options.time);
+
+            LOGGER.info("printing scc");
+            printSCC(scc);
+
         } catch(Exception e) {
             System.out.println("Critical error occurred: " + e);
             return;
+        }
+    }
+
+    /**
+     * Prints strongly connected components.
+     *
+     * @param scc strongly connected components
+     */
+    public static void printSCC(List<Set<Integer>> scc) {
+        for(int i = 0; i < scc.size(); ++i) {
+            System.out.print((i + 1) + ": {" );
+            System.out.print(String.join(", ", scc.get(i).stream().map(e -> e.toString()).collect(Collectors.toList())));
+            System.out.print("}");
+            System.out.println();
         }
     }
 
@@ -116,7 +137,7 @@ public class Main {
      * @throws ImportException if an error occurs
      * @throws IOException if an error occurs
      */
-    private static DirectedGraph<Integer, DefaultEdge> read(String inputFile) throws ImportException, IOException {
+    public static DirectedGraph<Integer, DefaultEdge> read(String inputFile) throws ImportException, IOException {
         DOTImporter<Integer, DefaultEdge> importer =
                 new DOTImporter<>(new VertexProviderImpl(), new EdgeProviderImpl());
 
@@ -147,7 +168,7 @@ public class Main {
      *
      * @author Cezary Pawlowski
      */
-    public static class VertexProviderImpl implements VertexProvider<Integer> {
+    private static class VertexProviderImpl implements VertexProvider<Integer> {
         @Override
         public Integer buildVertex(String label, Map<String, String> attributes) {
             return Integer.parseInt(label);
@@ -159,7 +180,7 @@ public class Main {
      *
      * @author Cezary Pawlowski
      */
-    public static class EdgeProviderImpl implements EdgeProvider<Integer, DefaultEdge> {
+    private static class EdgeProviderImpl implements EdgeProvider<Integer, DefaultEdge> {
         @Override
         public DefaultEdge buildEdge(Integer from, Integer to, String label, Map<String, String> attributes) {
             return new DefaultEdge();

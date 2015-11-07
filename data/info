@@ -1,6 +1,9 @@
-generated probabilistic digraphs (p = 0.25)
+generated probabilistic digraphs (p = 0.25):
 
-v:
-10
-100
-1000
+v = 10 -> p10.gv
+v = 100 -> p100.gv
+v = 1000 -> p1000.gv
+
+generated strong digraphs:
+
+v = 100, e=2000, c=7 -> s100.gv

@@ -12,7 +12,8 @@ Program developed for directed graph generation.
 
 Invocations:
 
-./run.sh -logLevel=off -probMode -v=10 -outputFile=10.gv -p=0.25
+./run.sh -logLevel=off -probMode -v=10 -outputFile=p10.gv -p=0.25
+./run.sh -logLevel=off -strongMode -v=100 -outputFile=s100.gv -e=2000 -c=7
 
 # tarjan #
 
@@ -20,4 +21,4 @@ Tarjan's strongly connected components algorithm.
 
 Invocations:
 
-./run.sh -logLevel=off -inputFile=../data/10.gv -time
+./run.sh -logLevel=off -inputFile=../data/s100.gv -time
