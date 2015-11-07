@@ -1,6 +1,6 @@
 package pl.zerocool.gis.generator;
 
-import org.jgraph.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.DOTExporter;
 import org.jgrapht.graph.DefaultDirectedGraph;
@@ -81,16 +81,6 @@ public class Main {
         }
 
         LOGGER.config("logging configured");
-
-        /*
-        LOGGER.severe("test");
-        LOGGER.warning("test");
-        LOGGER.info("test");
-        LOGGER.config("test");
-        LOGGER.fine("test");
-        LOGGER.finer("test");
-        LOGGER.finest("test");
-        */
     }
 
     /**
@@ -135,7 +125,7 @@ public class Main {
      * @param graph graph in algs4 representation
      * @return a graph in jgrapht representation
      */
-    private static DirectedGraph convert(Digraph graph) {
+    public static DirectedGraph convert(Digraph graph) {
         DirectedGraph<Integer, DefaultEdge> jgraph =
                 new DefaultDirectedGraph<>(DefaultEdge.class);
 
@@ -161,7 +151,7 @@ public class Main {
      * @throws UnsupportedEncodingException if an error occurs
      */
     private static void save(DirectedGraph jgraph, String outputFile) throws FileNotFoundException, UnsupportedEncodingException {
-        DOTExporter exporter = new DOTExporter();
+        DOTExporter exporter = new DOTExporter(); // vertex indices start with one
         PrintWriter writer = new PrintWriter(outputFile, "UTF-8");
         exporter.export(writer, jgraph);
     }

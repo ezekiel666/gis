@@ -1,6 +1,6 @@
 package pl.zerocool.gis.tarjan;
 
-import org.jgraph.graph.DefaultEdge;
+import org.jgrapht.graph.DefaultEdge;
 import org.jgrapht.DirectedGraph;
 import org.jgrapht.ext.DOTImporter;
 import org.jgrapht.ext.EdgeProvider;
@@ -83,16 +83,6 @@ public class Main {
         }
 
         LOGGER.config("logging configured");
-
-        /*
-        LOGGER.severe("test");
-        LOGGER.warning("test");
-        LOGGER.info("test");
-        LOGGER.config("test");
-        LOGGER.fine("test");
-        LOGGER.finer("test");
-        LOGGER.finest("test");
-        */
     }
 
     /**
@@ -172,10 +162,7 @@ public class Main {
     public static class EdgeProviderImpl implements EdgeProvider<Integer, DefaultEdge> {
         @Override
         public DefaultEdge buildEdge(Integer from, Integer to, String label, Map<String, String> attributes) {
-            DefaultEdge edge = new DefaultEdge();
-            edge.setSource(from);
-            edge.setTarget(to);
-            return edge;
+            return new DefaultEdge();
         }
     }
 }
