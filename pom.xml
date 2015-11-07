@@ -169,7 +169,10 @@
                         <artifactId>umlgraph</artifactId>
                         <version>${uml.graph.version}</version>
                     </docletArtifact>
-                    <additionalparam>-views -all</additionalparam>
+                    <additionalparam>-views -all -Xdoclint:none</additionalparam>
+                    <!--
+                    <failOnError>false</failOnError>
+                    -->
                     <useStandardDocletOptions>true</useStandardDocletOptions>
                 </configuration>
                 <executions>
