@@ -13,6 +13,7 @@ Program developed for directed graph generation.
 Invocations:
 
 ./run.sh -logLevel=off -probMode -v=10 -outputFile=p10.gv -p=0.25
+
 ./run.sh -logLevel=off -strongMode -v=100 -outputFile=s100.gv -e=2000 -c=7
 
 # tarjan #

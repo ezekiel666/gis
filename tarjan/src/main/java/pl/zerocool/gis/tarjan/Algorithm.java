@@ -12,7 +12,7 @@ import java.util.*;
  */
 public class Algorithm {
     /**
-     * Computes strongly connected components with tarjan's algoritm.
+     * Computes strongly connected components with Tarjan's algoritm.
      *
      * @param graph graph
      * @return strongly connected components
